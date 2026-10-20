@@ -1,0 +1,20 @@
+{
+  "name": "mehak-ghayoor-baraat",
+  "private": true,
+  "version": "1.0.0",
+  "type": "module",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build --base=./",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@fontsource/amiri-quran": "^5.3.0",
+    "@fontsource/eb-garamond": "^5.3.0",
+    "@fontsource/marcellus": "^5.3.0",
+    "gsap": "^3.15.0"
+  },
+  "devDependencies": {
+    "vite": "^7.0.0"
+  }
+}
