@@ -15,7 +15,7 @@
 const GOLD_LEAD = 0.0; // gold strokes carry their own later --d already
 const RISE_STEP = 0.07;
 const RISE_START = 0.08;
-const RISE_TIME = 0.5; // must match [data-rise] transition in styles.css
+const RISE_TIME = 0.8; // the longest [data-rise] transition in styles.css (the pair's spring)
 
 const secs = (v) => parseFloat(v) || 0;
 

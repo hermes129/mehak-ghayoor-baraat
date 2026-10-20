@@ -25,6 +25,11 @@ document.querySelectorAll('[data-rosette]').forEach((host) => {
 
 $('[data-seal]').innerHTML = seal({ size: 168 });
 
+// Four-point sparkles for the pair: concave diamonds, the star field's own cross.
+document.querySelectorAll('.sparkle').forEach((s) => {
+  s.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 0Q11 9 20 10Q11 11 10 20Q9 11 0 10Q9 9 10 0Z"/></svg>';
+});
+
 const FIELDS = { cover: 20, band: 14, night: 26 };
 document.querySelectorAll('[data-field]').forEach((host, i) => {
   host.innerHTML = starField({ id: `field-${host.dataset.field}-${i}`, side: FIELDS[host.dataset.field], theta: THETA });
