@@ -2,192 +2,273 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover" />
-    <meta name="theme-color" content="#f5eedf" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="description"
+      content="Syed Hassam Uddin and Tahseen Hassam invite you to the baraat of their daughter Mehak with Ghayoor Raza. Friday 8 January 2027, 9 pm, Royal Sapphire, Karachi."
+    />
+    <meta name="theme-color" content="#f5efe3" />
+    <link rel="icon" href="./favicon.svg" type="image/svg+xml" />
     <title>Mehak &amp; Ghayoor / The Baraat</title>
-    <meta name="description" content="Syed Hassam Uddin and Tahseen Hassam request the pleasure of your company at the baraat of their daughter Mehak with Ghayoor Raza. Friday 8 January 2027, Royal Sapphire, Karachi." />
-    <meta property="og:title" content="Mehak &amp; Ghayoor / The Baraat" />
-    <meta property="og:description" content="Friday 8 January 2027, 9 pm. Royal Sapphire, Gulistan-e-Johar, Karachi." />
-    <link rel="icon" type="image/svg+xml" href="./favicon.svg" />
-    <script>document.documentElement.classList.add('js');</script>
   </head>
   <body>
-    <!-- The cover. Script locks the page behind it; without script it never
-         shows, and the invitation below simply reads from the top. -->
-    <div class="cover" id="cover">
-      <div class="cover__field" data-field="cover"></div>
-      <div class="cover__frame" aria-hidden="true"></div>
-      <div class="cover__inner">
-        <p class="cover__eyebrow">The Baraat of</p>
-        <p class="cover__names">Mehak <span class="amp">&amp;</span> Ghayoor</p>
-        <button class="seal" id="open-invitation" type="button" aria-label="Open the invitation" data-construct="manual">
-          <span class="seal__host" data-seal></span>
-          <span class="seal__initials" aria-hidden="true">M<i>&amp;</i>G</span>
-        </button>
-        <p class="cover__hint">Tap the seal to open</p>
+    <a class="skip-link" href="#main-content">Skip to invitation</a>
+
+    <div class="opener" id="opener" aria-label="Wedding invitation cover">
+      <div class="opener__panel opener__panel--left" aria-hidden="true">
+        <img class="opener__art" src="/assets/gate-nikkah.webp" alt="">
+        <span class="opener__corner opener__corner--top"></span>
+        <span class="opener__corner opener__corner--bottom"></span>
       </div>
-      <p class="cover__foot"><span class="cover__plate">Friday, 8 January 2027 <span aria-hidden="true">·</span> Karachi</span></p>
-      <div class="cover__ring" aria-hidden="true"></div>
+      <div class="opener__panel opener__panel--right" aria-hidden="true">
+        <img class="opener__art" src="/assets/gate-nikkah.webp" alt="">
+        <span class="opener__corner opener__corner--top"></span>
+        <span class="opener__corner opener__corner--bottom"></span>
+      </div>
+
+      <!-- The opening film. Frame 0 is the same painting the panels carry, so
+           it cuts in invisibly; it ends on flat white, which .gate-veil then
+           takes over at the same value. Portrait viewports only. The source
+           is 9:16 and a cover-crop on a wide screen would throw the doors
+           off frame. Landscape keeps the parting-panel gate. -->
+      <video
+        class="opener__film"
+        id="opener-film"
+        playsinline
+        muted
+        preload="auto"
+        aria-hidden="true"
+      >
+        <source src="/assets/gate-open.webm" type="video/webm" />
+        <source src="/assets/gate-open.mp4" type="video/mp4" />
+      </video>
+
+      <div class="opener__ground" data-motif="fineGridTile" data-motif-id="gate" aria-hidden="true"></div>
+      <div class="opener__content">
+        <p class="eyebrow">Together with their families</p>
+        <div class="opener__monogram" aria-hidden="true">
+          <span>M</span>
+          <i>&amp;</i>
+          <span>G</span>
+        </div>
+        <h1>
+          <span>Mehak</span>
+          <i>&amp;</i>
+          <span>Ghayoor</span>
+        </h1>
+        <p class="opener__occasion">request the honour of your presence at their baraat</p>
+        <button class="seal-button" id="open-invitation" type="button">
+          <span>Open the invitation</span>
+        </button>
+        <p class="opener__date">08 · 01 · 2027</p>
+      </div>
+
+      <p class="opener__hint">A quiet beginning, wrapped in gold</p>
     </div>
 
-    <main id="main" tabindex="-1">
+    <!-- Sits outside .opener on purpose: it must still be painting white
+         after the opener is hidden, otherwise the film's white last frame
+         cuts straight to the dark hero. -->
+    <div class="gate-veil" id="gate-veil" aria-hidden="true"></div>
+
+    <main id="main-content" tabindex="-1">
       <section class="hero" aria-labelledby="hero-title">
-        <div class="hero__frame" data-construct="manual">
-          <div class="hero__arch" data-arch="hero" aria-hidden="true"></div>
-          <div class="hero__content">
-            <p class="bismillah" lang="ar" dir="rtl" data-rise>بِسْمِ ٱللَّهِ ٱلرَّحْمَٰنِ ٱلرَّحِيمِ</p>
-            <p class="bismillah__gloss" data-rise>In the name of Allah, the Beneficent, the Merciful</p>
-            <div class="hero__rosette" data-rosette="8,3,2" data-size="64" aria-hidden="true"></div>
-            <p class="kicker" data-rise>The Baraat</p>
-            <h1 class="hero__names" id="hero-title" data-rise>
-              <span>Mehak</span>
-              <span class="amp" aria-label="and">&amp;</span>
-              <span>Ghayoor</span>
-            </h1>
-            <p class="hero__date" data-rise>Friday, 8 January 2027</p>
-            <p class="hero__place" data-rise>Royal Sapphire <span aria-hidden="true">·</span> Karachi</p>
-          </div>
+        <div class="hero__image" data-motif="fineGridTile" data-motif-id="hero" aria-hidden="true"></div>
+        <div class="hero__veil" aria-hidden="true"></div>
+        <div class="hero__meta hero__meta--place">Karachi, Pakistan</div>
+        <div class="hero__meta hero__meta--date">Friday · 8 January 2027</div>
+        <div class="hero__copy">
+          <p class="eyebrow">Bismillah-ir-Rahman-ir-Rahim</p>
+          <h2 id="hero-title">
+            <span>Mehak</span>
+            <i>&amp;</i>
+            <span>Ghayoor</span>
+          </h2>
+          <p>With gratitude, joy and the duas of those we love.</p>
         </div>
+        <button class="scroll-cue" type="button" data-scroll-to="invitation">
+          <span>View invitation</span>
+          <svg aria-hidden="true" viewBox="0 0 24 24">
+            <path d="M12 4v15m0 0-6-6m6 6 6-6" />
+          </svg>
+        </button>
       </section>
 
-      <section class="invitation section" aria-label="Invitation" data-construct>
-        <div class="rosette" data-rosette="8,3,2" data-size="120" aria-hidden="true"></div>
-        <p class="invitation__hosts" data-rise><span class="nb">Syed Hassam Uddin</span> <span class="amp">&amp;</span> <span class="nb">Tahseen Hassam</span></p>
-        <p class="invitation__line" data-rise>request the pleasure of your company on the auspicious occasion of the baraat of their beloved daughter</p>
-        <!-- The pair: she springs in from one side, he from the other, and two
-             stars roll in to meet between them. -->
-        <div class="pair">
-          <span class="sparkle" style="--x:6%;--y:4%;--s:14px;--k:0s" aria-hidden="true"></span>
-          <span class="sparkle" style="--x:88%;--y:0%;--s:18px;--k:.9s" aria-hidden="true"></span>
-          <span class="sparkle" style="--x:96%;--y:46%;--s:11px;--k:1.7s" aria-hidden="true"></span>
-          <span class="sparkle" style="--x:2%;--y:62%;--s:16px;--k:.4s" aria-hidden="true"></span>
-          <span class="sparkle" style="--x:80%;--y:94%;--s:13px;--k:1.3s" aria-hidden="true"></span>
-          <p class="invitation__name invitation__name--bride" data-rise data-from="right">Mehak</p>
-          <p class="pair__with" data-rise data-from="pop">
-            <span class="pair__star pair__star--l" data-rosette="8,3,0" data-size="30" data-plain aria-hidden="true"></span>
-            <span class="pair__word">with</span>
-            <span class="pair__star pair__star--r" data-rosette="8,3,0" data-size="30" data-plain aria-hidden="true"></span>
+      <section class="invitation section-shell" id="invitation" aria-labelledby="invitation-title">
+        <div class="section-index reveal">
+          <span>01</span>
+          <p>The invitation</p>
+        </div>
+        <div class="invitation__copy reveal">
+          <div class="bismillah-art">
+            <img
+              src="/assets/bismillah-calligraphy.png"
+              alt=""
+              width="1661"
+              height="539"
+            />
+            <span class="sr-only" lang="ar" dir="rtl">بِسْمِ اللَّهِ الرَّحْمَنِ الرَّحِيمِ</span>
+          </div>
+          <h2 id="invitation-title">A promise made <em>in grace.</em></h2>
+          <p>
+            By the grace of Allah, <strong class="invitation__hosts">Syed Hassam Uddin &amp; Tahseen Hassam</strong>
+            request the pleasure of your company on the auspicious occasion of the baraat
+            of their beloved daughter
           </p>
-          <p class="invitation__name invitation__name--groom" data-rise data-from="left">Ghayoor Raza</p>
+          <div class="invitation__names" aria-label="Mehak with Ghayoor Raza">
+            <span>Mehak</span>
+            <i>with</i>
+            <span>Ghayoor Raza</span>
+          </div>
+          <p class="invitation__parents">son of Raza Hussain Kazmi &amp; Rashida Kazmi</p>
         </div>
-        <p class="invitation__parents" data-rise>son of <span class="nb">Raza Hussain Kazmi</span> <span class="amp">&amp;</span> <span class="nb">Rashida Kazmi</span></p>
+        <div class="invitation__art reveal" aria-hidden="true">
+          <span class="arch-line arch-line--one"></span>
+          <span class="arch-line arch-line--two"></span>
+          <span class="crescent-mark"></span>
+        </div>
       </section>
 
-      <section class="verse section" aria-label="A verse from the Qur'an" data-construct>
-        <div class="verse__band" data-field="band" aria-hidden="true"></div>
-        <figure class="verse__body">
-          <blockquote>
-            <p class="verse__arabic" lang="ar" dir="rtl" data-rise>وَمِن كُلِّ شَىْءٍ خَلَقْنَا زَوْجَيْنِ لَعَلَّكُمْ تَذَكَّرُونَ</p>
-            <p class="verse__english" data-rise>And all things We have created by pairs, that haply ye may reflect.</p>
-          </blockquote>
-          <figcaption class="verse__cite" data-rise>Surah Adh-Dhariyat <span aria-hidden="true">·</span> 51:49</figcaption>
+      <section class="ceremony" aria-labelledby="ceremony-title">
+        <div class="ceremony__image image-parallax" role="img" aria-label="Jasmine, gold and a Quran laid out for the wedding"></div>
+        <div class="ceremony__card reveal">
+          <p class="section-kicker">The celebration</p>
+          <h2 id="ceremony-title">The <em>baraat.</em></h2>
+          <div class="date-scratch date-scratch--nikkah" data-date-scratch data-scratch-key="mehak-ghayoor-baraat-date" data-scratch-cover="#a8833d" data-scratch-accent="#f7f2e8">
+            <div class="date-scratch__stage">
+              <div class="date-scratch__value" tabindex="-1" aria-label="Baraat date: Friday 8 January 2027, Karachi">
+                <span class="date-scratch__numerals"><span>08</span><i>·</i><span>01</span><i>·</i><span>27</span></span>
+                <span class="date-scratch__rule" aria-hidden="true"></span>
+                <span class="date-scratch__caption">Friday, January 2027 / Karachi</span>
+              </div>
+              <canvas class="date-scratch__canvas" aria-hidden="true"></canvas>
+              <p class="date-scratch__hint" aria-hidden="true">Scratch to reveal</p>
+            </div>
+            <button class="date-scratch__button" type="button">Reveal date</button>
+            <p class="sr-only" data-date-scratch-status aria-live="polite"></p>
+          </div>
+          <div class="ceremony__details">
+            <div>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><circle cx="12" cy="12" r="8" /><path d="M12 7v5l3 2" /></svg>
+              <span>Arrival at nine in the evening</span>
+            </div>
+            <div>
+              <svg aria-hidden="true" viewBox="0 0 24 24"><path d="M12 21s7-5.3 7-12a7 7 0 1 0-14 0c0 6.7 7 12 7 12Z" /><circle cx="12" cy="9" r="2.3" /></svg>
+              <span>Royal Sapphire<br />Gulistan-e-Johar, Karachi</span>
+            </div>
+          </div>
+          <div class="button-row">
+            <button class="text-button" type="button" id="add-calendar">Add to calendar</button>
+            <button class="text-button" type="button" id="copy-address">Copy address</button>
+          </div>
+          <p class="status-message" id="action-status" role="status" aria-live="polite"></p>
+        </div>
+      </section>
+
+      <section class="verse section-shell" aria-label="Quranic verse">
+        <div class="verse__ornament reveal" aria-hidden="true">
+          <span></span>
+        </div>
+        <blockquote class="reveal">
+          <p>“And He placed between you affection and mercy.”</p>
+          <cite>Qur’an · 30:21</cite>
+        </blockquote>
+      </section>
+
+      <section class="portrait-story" aria-labelledby="story-title">
+        <div class="portrait-story__copy reveal">
+          <p class="section-kicker">Our beginning</p>
+          <h2 id="story-title">A quiet kind<br />of <em>forever.</em></h2>
+          <p>
+            Some beginnings arrive softly: a shared prayer, a room full of family,
+            and the certainty of choosing one another.
+          </p>
+        </div>
+        <figure class="portrait-story__figure reveal">
+          <div class="portrait-story__image" role="img"
+               aria-label="A folded ivory dupatta with a gold gota border on a sunlit marble ledge, beside a brass bowl of jasmine"></div>
+          <figcaption>After the vows, before the world rushes back in.</figcaption>
         </figure>
-        <div class="verse__band verse__band--foot" data-field="band" aria-hidden="true"></div>
       </section>
 
-      <section class="evening section" aria-labelledby="evening-title" data-construct>
-        <div class="window">
-          <div class="window__arch" data-arch="window" aria-hidden="true"></div>
-          <div class="window__head">
-            <div class="rosette rosette--small" data-rosette="10,3,2" data-size="72" aria-hidden="true"></div>
-            <p class="kicker" data-rise>The evening</p>
-            <h2 id="evening-title" data-rise>Friday night</h2>
-          </div>
-          <dl class="window__rows">
-            <div class="row" data-rise>
-              <dt>Date</dt>
-              <dd><strong>8 January 2027</strong><span>Friday</span></dd>
-            </div>
-            <div class="row" data-rise>
-              <dt>Arrival</dt>
-              <dd><strong>9:00 pm</strong><span>Baraat arrival</span></dd>
-            </div>
-            <div class="row" data-rise>
-              <dt>Venue</dt>
-              <dd><strong>Royal Sapphire</strong><span>Gulistan-e-Johar, Karachi</span></dd>
-            </div>
-          </dl>
-          <button class="button" id="add-calendar" type="button" data-rise>Add to calendar</button>
-        </div>
-      </section>
-
-      <section class="venue section" aria-labelledby="venue-title" data-construct>
-        <div class="venue__field" data-field="night" aria-hidden="true"></div>
-        <div class="venue__inner">
-          <div class="rosette rosette--night" data-rosette="12,5,3" data-size="132" aria-hidden="true"></div>
-          <p class="kicker" data-rise>The venue</p>
-          <h2 id="venue-title" data-rise>Royal Sapphire</h2>
-          <address class="venue__address" data-rise>
-            Plot # B-54, 13B, Block 1<br>
+      <section class="venue section-shell" aria-labelledby="venue-title">
+        <div class="venue__card reveal">
+          
+          <h2 id="venue-title">Royal Sapphire.</h2>
+          <p class="venue__address">
+            Plot # B-54, 13B, Block 1<br />
             Gulistan-e-Johar, Karachi
-          </address>
-          <div class="venue__actions" data-rise>
-            <a class="button button--night" id="open-maps" href="https://www.google.com/maps/search/?api=1&amp;query=Royal%20Sapphire%2C%20Plot%20B-54%2C%20Block%201%2C%20Gulistan-e-Johar%2C%20Karachi" target="_blank" rel="noopener">Open in Google Maps</a>
-            <button class="button button--night button--quiet" id="copy-address" type="button">Copy address</button>
-          </div>
-          <p class="status" id="venue-status" role="status" aria-live="polite"></p>
+          </p>
+          <a
+            class="circle-link"
+            href="https://www.google.com/maps/search/?api=1&amp;query=Royal+Sapphire%2C+Plot+B-54%2C+Block+1%2C+Gulistan-e-Johar%2C+Karachi"
+            target="_blank"
+            rel="noreferrer"
+          >
+            <span>Open map</span>
+          </a>
+        </div>
+        <div class="venue__linework" aria-hidden="true">
+          <div
+            class="venue__image image-parallax"
+            role="img"
+            aria-label="Ivory arches lit for the evening"
+          ></div>
+          <span></span><span></span><span></span>
         </div>
       </section>
 
-      <section class="countdown section" aria-labelledby="countdown-title" data-construct>
-        <p class="kicker" data-rise>Counting the days</p>
-        <h2 id="countdown-title" data-rise>Until the baraat arrives</h2>
-        <div class="countdown__grid" role="timer" aria-live="off">
-          <div class="unit" data-rise><span class="unit__frame" data-octagon aria-hidden="true"></span><strong data-countdown="days">00</strong><span>Days</span></div>
-          <div class="unit" data-rise><span class="unit__frame" data-octagon aria-hidden="true"></span><strong data-countdown="hours">00</strong><span>Hours</span></div>
-          <div class="unit" data-rise><span class="unit__frame" data-octagon aria-hidden="true"></span><strong data-countdown="minutes">00</strong><span>Minutes</span></div>
-          <div class="unit" data-rise><span class="unit__frame" data-octagon aria-hidden="true"></span><strong data-countdown="seconds">00</strong><span>Seconds</span></div>
+      <section class="countdown" aria-labelledby="countdown-title">
+        
+        <h2 id="countdown-title" class="reveal">Until the baraat<br /><em>arrives.</em></h2>
+        <div class="countdown__grid reveal" aria-live="polite">
+          <div><strong id="days">00</strong><span>Days</span></div>
+          <div><strong id="hours">00</strong><span>Hours</span></div>
+          <div><strong id="minutes">00</strong><span>Minutes</span></div>
+          <div><strong id="seconds">00</strong><span>Seconds</span></div>
         </div>
       </section>
 
-      <section class="rsvp section" aria-labelledby="rsvp-title" data-construct>
-        <p class="kicker" data-rise>RSVP</p>
-        <h2 id="rsvp-title" data-rise>Kindly confirm</h2>
-        <p class="rsvp__lead" data-rise>Your presence and your duas would honour us. Please let one of the family know you will be joining.</p>
-        <ul class="contacts">
-          <li class="contact" data-rise>
-            <div class="contact__who"><strong>Syed Adil</strong><a href="tel:+923178937541">0317 8937541</a></div>
-            <div class="contact__actions">
-              <a class="chip" href="tel:+923178937541" aria-label="Call Syed Adil">Call</a>
-              <a class="chip" data-whatsapp="923178937541" href="https://wa.me/923178937541" target="_blank" rel="noopener" aria-label="WhatsApp Syed Adil">WhatsApp</a>
-            </div>
-          </li>
-          <li class="contact" data-rise>
-            <div class="contact__who"><strong>Syed Mohib</strong><a href="tel:+923121027108">0312 1027108</a></div>
-            <div class="contact__actions">
-              <a class="chip" href="tel:+923121027108" aria-label="Call Syed Mohib">Call</a>
-              <a class="chip" data-whatsapp="923121027108" href="https://wa.me/923121027108" target="_blank" rel="noopener" aria-label="WhatsApp Syed Mohib">WhatsApp</a>
-            </div>
-          </li>
-          <li class="contact" data-rise>
-            <div class="contact__who"><strong>Osama Ahmed</strong><a href="tel:+923333961804">0333 3961804</a></div>
-            <div class="contact__actions">
-              <a class="chip" href="tel:+923333961804" aria-label="Call Osama Ahmed">Call</a>
-              <a class="chip" data-whatsapp="923333961804" href="https://wa.me/923333961804" target="_blank" rel="noopener" aria-label="WhatsApp Osama Ahmed">WhatsApp</a>
-            </div>
-          </li>
-          <li class="contact contact--name-only" data-rise>
-            <div class="contact__who"><strong>Syed Ghayas Uddin Danish</strong></div>
-          </li>
-        </ul>
+      <section class="rsvp section-shell" aria-labelledby="rsvp-title">
+        <div class="rsvp__mark reveal" aria-hidden="true">م × غ</div>
+        <div class="rsvp__copy reveal">
+          
+          <h2 id="rsvp-title">Will you join us?</h2>
+          <p>
+            Your presence and your duas would mean more to us than any gift.
+            Kindly confirm with one of the family.
+          </p>
+          <ul class="contacts">
+            <li>
+              <span class="contacts__who"><strong>Syed Adil</strong><a href="tel:+923178937541">0317 8937541</a></span>
+              <span class="contacts__actions"><a class="contacts__chip" href="tel:+923178937541" aria-label="Call Syed Adil">Call</a><a class="contacts__chip" data-whatsapp="923178937541" href="https://wa.me/923178937541" target="_blank" rel="noreferrer" aria-label="WhatsApp Syed Adil">WhatsApp</a></span>
+            </li>
+            <li>
+              <span class="contacts__who"><strong>Syed Mohib</strong><a href="tel:+923121027108">0312 1027108</a></span>
+              <span class="contacts__actions"><a class="contacts__chip" href="tel:+923121027108" aria-label="Call Syed Mohib">Call</a><a class="contacts__chip" data-whatsapp="923121027108" href="https://wa.me/923121027108" target="_blank" rel="noreferrer" aria-label="WhatsApp Syed Mohib">WhatsApp</a></span>
+            </li>
+            <li>
+              <span class="contacts__who"><strong>Osama Ahmed</strong><a href="tel:+923333961804">0333 3961804</a></span>
+              <span class="contacts__actions"><a class="contacts__chip" href="tel:+923333961804" aria-label="Call Osama Ahmed">Call</a><a class="contacts__chip" data-whatsapp="923333961804" href="https://wa.me/923333961804" target="_blank" rel="noreferrer" aria-label="WhatsApp Osama Ahmed">WhatsApp</a></span>
+            </li>
+            <li>
+              <span class="contacts__who"><strong>Syed Ghayas Uddin Danish</strong></span>
+            </li>
+          </ul>
+        </div>
+        <p class="rsvp__signoff reveal">With love and duas, <strong>Syed Hassam Uddin &amp; Tahseen Hassam</strong></p>
+        <p class="music-credit reveal">Music: <a href="https://commons.wikimedia.org/wiki/File:RanjitMakkuniRagaKaushiKanra.ogg" target="_blank" rel="noreferrer">Kaushi Kanra by Ranjit Makkuni &amp; Akram Khan · CC BY-SA 3.0</a></p>
       </section>
-
-      <footer class="footer" data-construct>
-        <div class="rosette rosette--night" data-rosette="8,3,2" data-size="84" aria-hidden="true"></div>
-        <p class="footer__with" data-rise>With love and duas</p>
-        <p class="footer__hosts" data-rise><span class="nb">Syed Hassam Uddin</span> <span class="amp">&amp;</span> <span class="nb">Tahseen Hassam</span></p>
-        <p class="footer__credit" data-rise>Music: <a href="https://commons.wikimedia.org/wiki/File:Oud_music_by_Andy_R._Jordan_2v2.mp3" target="_blank" rel="noopener">oud by Andy R. Jordan</a>, CC BY-SA 3.0</p>
-      </footer>
     </main>
 
     <audio id="site-music" loop preload="none">
-      <source src="./assets/oud-andy-r-jordan.mp3" type="audio/mpeg" />
+      <source src="./assets/raga-kaushi-kanra.mp3" type="audio/mpeg" />
+      <source src="./assets/raga-kaushi-kanra.ogg" type="audio/ogg; codecs=vorbis" />
     </audio>
     <button class="music-toggle" id="music-toggle" type="button" aria-pressed="false" aria-label="Play background music" hidden>
-      <span class="music-toggle__icon" data-rosette="8,3,0" data-size="22" data-plain aria-hidden="true"></span>
+      <span class="music-toggle__icon" aria-hidden="true"><i></i><i></i></span>
       <span class="music-toggle__label">Play music</span>
     </button>
-
     <script type="module" src="/src/main.js"></script>
   </body>
 </html>

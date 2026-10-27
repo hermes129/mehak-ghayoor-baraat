@@ -1,169 +1,35 @@
-import '@fontsource/marcellus/latin-400.css';
-import '@fontsource/eb-garamond/latin-400.css';
-import '@fontsource/eb-garamond/latin-400-italic.css';
-import '@fontsource/amiri-quran/arabic-400.css';
-import './styles.css';
 import gsap from 'gsap';
-import { rosette, arch, starField, seal, octagonFrame } from './geometry.js';
-import { initConstruct } from './construct.js';
+import { ScrollTrigger } from 'gsap/ScrollTrigger';
+import './styles.css';
+import { initDateScratch } from './date-scratch.js';
+import { initMotifs, initDraw } from './utils/draw.js';
+
+gsap.registerPlugin(ScrollTrigger);
 
 const $ = (selector, scope = document) => scope.querySelector(selector);
+const $$ = (selector, scope = document) => [...scope.querySelectorAll(selector)];
 const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-// The contact angle for every star field on the page. 67.5° is the angle
-// that gives the octagons clean eight-pointed stars and the square gaps
-// clean crosses; 60° opens them into kites and 72° pinches them shut.
-const THETA = (67.5 * Math.PI) / 180;
 
-/* ── Ornament ─────────────────────────────────────────────────────────── */
-document.querySelectorAll('[data-rosette]').forEach((host) => {
-  const [n, k, inner] = host.dataset.rosette.split(',').map(Number);
-  const size = Number(host.dataset.size);
-  const plain = 'plain' in host.dataset;
-  host.style.setProperty('--size', `${size}px`);
-  host.innerHTML = rosette({ size, n, k, inner, ring: !plain, pricks: !plain });
-});
+// Illustration layer, injected before anything measures the DOM.
+initMotifs();
+initDraw(reduceMotion);
 
-$('[data-seal]').innerHTML = seal({ size: 168 });
-
-// Four-point sparkles for the pair: concave diamonds, the star field's own cross.
-document.querySelectorAll('.sparkle').forEach((s) => {
-  s.innerHTML = '<svg viewBox="0 0 20 20"><path d="M10 0Q11 9 20 10Q11 11 10 20Q9 11 0 10Q9 9 10 0Z"/></svg>';
-});
-
-const FIELDS = { cover: 20, band: 14, night: 26 };
-document.querySelectorAll('[data-field]').forEach((host, i) => {
-  host.innerHTML = starField({ id: `field-${host.dataset.field}-${i}`, side: FIELDS[host.dataset.field], theta: THETA });
-});
-
-/* Arches and octagons are drawn at the size they render, so they are
-   refitted whenever their box changes width (height changes from a phone's
-   address bar are ignored unless they are real). */
-const ARCHES = {
-  hero: { spandrel: { side: 13, theta: THETA } },
-  window: { spandrel: { side: 11, theta: THETA }, inset: 8 },
-};
-
-function fitArch(host) {
-  const w = host.clientWidth;
-  const h = host.clientHeight;
-  if (!w || !h) return;
-  const { geometry, svg } = arch({ w, h, id: `arch-${host.dataset.arch}`, ...ARCHES[host.dataset.arch] });
-  host.innerHTML = svg;
-  host.parentElement.style.setProperty('--rise', `${Math.round(geometry.rise)}px`);
-}
-
-function fitOctagon(host) {
-  const size = Math.round(host.clientWidth);
-  if (size) host.innerHTML = octagonFrame({ size });
-}
-
-const fitted = [
-  ...[...document.querySelectorAll('[data-arch]')].map((el) => [el, fitArch]),
-  ...[...document.querySelectorAll('[data-octagon]')].map((el) => [el, fitOctagon]),
-];
-const lastSize = new WeakMap();
-const refit = new ResizeObserver((entries) => {
-  entries.forEach((entry) => {
-    const el = entry.target;
-    const { width, height } = entry.contentRect;
-    const prev = lastSize.get(el);
-    if (prev && Math.abs(prev.w - width) < 1 && Math.abs(prev.h - height) < 40) return;
-    lastSize.set(el, { w: width, h: height });
-    fitted.find(([host]) => host === el)?.[1](el);
-  });
-});
-fitted.forEach(([el, fit]) => {
-  fit(el);
-  refit.observe(el);
-});
-
-const construct = initConstruct(reduceMotion);
-
-/* ── The cover ────────────────────────────────────────────────────────────
-   The seal sets itself out as the page loads. Pressing it turns the star a
-   quarter-step and lets it go, and a compass circle struck from where it sat
-   opens the card from the centre outwards. */
-const cover = $('#cover');
+const opener = $('#opener');
 const openButton = $('#open-invitation');
-const coverRing = $('.cover__ring');
-const heroFrame = $('.hero__frame');
-const main = $('#main');
-let opened = false;
-
-document.body.classList.add('is-locked');
-construct.build(openButton);
-
-const finishOpening = () => {
-  cover.hidden = true;
-  document.body.classList.remove('is-locked');
-  main.focus({ preventScroll: true });
-  // Sections only begin construction once nothing is covering them.
-  construct.start();
-};
-
-const openInvitation = () => {
-  if (opened) return;
-  opened = true;
-
-  // The press is the gesture the browser needs before any sound.
-  if (musicToggle) musicToggle.hidden = false;
-  setMusicPlaying(true);
-
-  if (reduceMotion) {
-    gsap.to(cover, { opacity: 0, duration: 0.3, ease: 'power1.out', onComplete: finishOpening });
-    return;
-  }
-
-  const box = openButton.getBoundingClientRect();
-  const cx = box.left + box.width / 2;
-  const cy = box.top + box.height / 2;
-  const far = Math.hypot(Math.max(cx, window.innerWidth - cx), Math.max(cy, window.innerHeight - cy)) + 24;
-  const hole = { r: box.width * 0.42 };
-
-  cover.style.setProperty('--cx', `${cx}px`);
-  cover.style.setProperty('--cy', `${cy}px`);
-  cover.style.setProperty('--hole', `${hole.r}px`);
-  gsap.set(coverRing, { left: cx, top: cy, width: hole.r * 2 + 6, height: hole.r * 2 + 6 });
-
-  gsap.timeline({ onComplete: finishOpening })
-    .to('.seal__art', { rotation: 45, scale: 0.92, transformOrigin: '50% 50%', duration: 0.42, ease: 'power2.inOut' })
-    .to('.seal__initials', { opacity: 0, duration: 0.25 }, '<')
-    .to(['.cover__eyebrow', '.cover__names', '.cover__hint', '.cover__foot'], { opacity: 0, y: -8, duration: 0.35, ease: 'power1.in' }, '<0.05')
-    // The arch starts setting itself out the moment the circle opens, so the
-    // first thing seen through it is construction, not blank paper.
-    .add(() => {
-      cover.classList.add('is-opening');
-      gsap.set(coverRing, { opacity: 1 });
-      construct.build(heroFrame);
-    }, '-=0.12')
-    .to('.seal', { opacity: 0, duration: 0.2 }, '<')
-    .to(hole, {
-      r: far,
-      duration: 0.95,
-      ease: 'power1.in',
-      onUpdate() {
-        cover.style.setProperty('--hole', `${hole.r.toFixed(1)}px`);
-        const d = hole.r * 2 + 6;
-        coverRing.style.width = `${d}px`;
-        coverRing.style.height = `${d}px`;
-      },
-    }, '<');
-};
-
-openButton.addEventListener('click', openInvitation);
-
-/* ── Music ────────────────────────────────────────────────────────────── */
+const hero = $('.hero');
+const mainContent = $('#main-content');
 const music = $('#site-music');
 const musicToggle = $('#music-toggle');
-const musicLabel = musicToggle?.querySelector('.music-toggle__label');
-if (music) music.volume = 0.35;
+const musicLabel = $('.music-toggle__label', musicToggle);
+
+if (music) music.volume = 0.26;
 
 function syncMusicControl() {
   if (!music || !musicToggle) return;
-  const playing = !music.paused;
-  musicToggle.setAttribute('aria-pressed', String(playing));
-  musicToggle.setAttribute('aria-label', playing ? 'Pause background music' : 'Play background music');
-  if (musicLabel) musicLabel.textContent = playing ? 'Pause music' : 'Play music';
+  const isPlaying = !music.paused;
+  musicToggle.setAttribute('aria-pressed', String(isPlaying));
+  musicToggle.setAttribute('aria-label', isPlaying ? 'Pause background music' : 'Play background music');
+  if (musicLabel) musicLabel.textContent = isPlaying ? 'Pause music' : 'Play music';
 }
 
 async function setMusicPlaying(shouldPlay) {
@@ -173,75 +39,285 @@ async function setMusicPlaying(shouldPlay) {
     syncMusicControl();
     return;
   }
+
   try {
     await music.play();
   } catch {
-    // Autoplay declined. The control stays visible and honest.
+    // The control remains available if a browser declines audio playback.
   }
   syncMusicControl();
 }
 
+document.body.classList.add('is-covered');
+initDateScratch();
+
+function revealInvitation() {
+  if (!opener || opener.dataset.opened === 'true') return;
+  opener.dataset.opened = 'true';
+  openButton.disabled = true;
+  if (musicToggle) musicToggle.hidden = false;
+  setMusicPlaying(true);
+
+  if (reduceMotion) {
+    opener.hidden = true;
+    document.body.classList.remove('is-covered');
+    mainContent?.focus({ preventScroll: true });
+    return;
+  }
+
+  const finish = () => {
+    opener.hidden = true;
+    document.body.classList.remove('is-covered');
+    mainContent?.focus({ preventScroll: true });
+    ScrollTrigger.refresh();
+  };
+
+  if (playOpeningFilm(finish)) return;
+
+  const timeline = gsap.timeline({
+    defaults: { ease: 'power3.inOut' },
+    onComplete: finish,
+  });
+
+  timeline
+    .to('.opener__content', { autoAlpha: 0, y: -36, duration: 0.55 })
+    .to('.opener__hint', { autoAlpha: 0, y: 14, duration: 0.3 }, '<')
+    // .opener__ground is a direct child of .opener, so it does not travel
+    // with the parting panels — without this it hangs over the revealed
+    // hero until the timeline ends and the opener is hidden.
+    .to('.opener__ground', { autoAlpha: 0, duration: 0.5 }, '<')
+    .to(
+      '.opener__corner',
+      {
+        autoAlpha: 0,
+        scale: 0.75,
+        duration: 0.45,
+        stagger: 0.06,
+      },
+      '<',
+    )
+    .to('.opener__panel--left', { xPercent: -102, duration: 1.35 }, '-=.08')
+    .to('.opener__panel--right', { xPercent: 102, duration: 1.35 }, '<')
+    .fromTo(
+      '.hero__image',
+      { scale: 1.08 },
+      { scale: 1, duration: 1.7, ease: 'power2.out' },
+      '-=1.15',
+    )
+    .fromTo(
+      ['.hero__copy > *', '.hero__meta', '.scroll-cue'],
+      { autoAlpha: 0, y: 28 },
+      { autoAlpha: 1, y: 0, duration: 0.75, stagger: 0.09, ease: 'power2.out' },
+      '-=.75',
+    );
+}
+
+/* ── The opening film ──────────────────────────────────────────────────
+   Portrait viewports only. The source is 9:16; cover-cropping it onto a
+   wide screen would push the doors out of frame and upscale a 716px-wide
+   picture past 1400px, so landscape keeps the parting-panel gate.
+
+   The handoff is the whole point. The clip ends on flat white, so the
+   veil is snapped to full white slightly BEFORE the last frame — while
+   the picture is already white — and only then is the opener torn down.
+   Nothing can flash between the two, and the reveal is a white-to-hero
+   fade rather than the bright-to-dark cut the panels would give.
+
+   Returns true if it took over the reveal, false to fall back. */
+function playOpeningFilm(finish) {
+  const film = $('#opener-film');
+  const veil = $('#gate-veil');
+  if (!film || !veil) return false;
+
+  // Landscape and near-square viewports keep the panels.
+  if (window.innerHeight / window.innerWidth < 1.2) return false;
+  // Nothing buffered yet — don't stall the tap on a cold cache.
+  if (film.readyState < 2) return false;
+  if (!film.canPlayType('video/mp4; codecs="avc1.42E01E"') && !film.canPlayType('video/webm')) {
+    return false;
+  }
+
+  let handedOff = false;
+  const handOff = () => {
+    if (handedOff) return;
+    handedOff = true;
+    // Both are pure white, so this is invisible even though it is instant.
+    gsap.set(veil, { display: 'block', opacity: 1 });
+    finish();
+    gsap.to(veil, {
+      opacity: 0,
+      duration: 1.2,
+      ease: 'power2.inOut',
+      onComplete: () => gsap.set(veil, { display: 'none' }),
+    });
+    gsap.fromTo('.hero__image', { scale: 1.08 }, { scale: 1, duration: 1.8, ease: 'power2.out' });
+    gsap.fromTo(
+      ['.hero__copy > *', '.hero__meta', '.scroll-cue'],
+      { autoAlpha: 0, y: 28 },
+      { autoAlpha: 1, y: 0, duration: 0.75, stagger: 0.09, ease: 'power2.out', delay: 0.45 },
+    );
+  };
+
+  // Snap the veil on while the picture is still white, not after it is gone.
+  film.addEventListener('timeupdate', () => {
+    if (film.duration && film.currentTime >= film.duration - 0.3) handOff();
+  });
+  film.addEventListener('ended', handOff);
+  film.addEventListener('error', handOff);
+  // A stalled decode must not leave the gate hanging.
+  const guard = window.setTimeout(handOff, 9000);
+  film.addEventListener('ended', () => window.clearTimeout(guard));
+
+  const played = film.play();
+  if (played?.catch) played.catch(handOff);
+
+  gsap.to('.opener__content', { autoAlpha: 0, y: -28, duration: 0.5, ease: 'power2.in' });
+  gsap.to('.opener__hint', { autoAlpha: 0, y: 14, duration: 0.35, ease: 'power2.in' });
+  gsap.to('.opener__ground', { autoAlpha: 0, duration: 0.5, ease: 'power2.in' });
+  // Frame 0 is the same painting the panels carry, so a short crossfade is
+  // enough to absorb any codec-level difference at the cut-in.
+  gsap.to(film, { opacity: 1, duration: 0.3, ease: 'none' });
+
+  return true;
+}
+
+openButton?.addEventListener('click', revealInvitation);
 musicToggle?.addEventListener('click', () => setMusicPlaying(music?.paused ?? true));
 music?.addEventListener('play', syncMusicControl);
 music?.addEventListener('pause', syncMusicControl);
 
-/* ── Countdown ────────────────────────────────────────────────────────── */
-const arrival = new Date('2027-01-08T21:00:00+05:00').getTime();
-const fields = Object.fromEntries(['days', 'hours', 'minutes', 'seconds'].map((k) => [k, $(`[data-countdown="${k}"]`)]));
-const pad = (n) => String(n).padStart(2, '0');
-const tick = () => {
-  const left = Math.max(0, arrival - Date.now());
-  fields.days.textContent = pad(Math.floor(left / 86_400_000));
-  fields.hours.textContent = pad(Math.floor((left / 3_600_000) % 24));
-  fields.minutes.textContent = pad(Math.floor((left / 60_000) % 60));
-  fields.seconds.textContent = pad(Math.floor((left / 1000) % 60));
+$$('[data-scroll-to]').forEach((button) => {
+  button.addEventListener('click', () => {
+    const target = document.getElementById(button.dataset.scrollTo);
+    target?.scrollIntoView({ behavior: reduceMotion ? 'auto' : 'smooth' });
+  });
+});
+
+if (!reduceMotion) {
+  gsap.set('.reveal', { autoAlpha: 0, y: 44 });
+
+  ScrollTrigger.batch('.reveal', {
+    start: 'top 88%',
+    once: true,
+    onEnter: (elements) => {
+      gsap.to(elements, {
+        autoAlpha: 1,
+        y: 0,
+        duration: 0.85,
+        stagger: 0.11,
+        ease: 'power3.out',
+        overwrite: true,
+      });
+    },
+  });
+
+  $$('.image-parallax').forEach((element) => {
+    gsap.fromTo(
+      element,
+      { backgroundPosition: 'right 38%' },
+      {
+        backgroundPosition: 'right 62%',
+        ease: 'none',
+        scrollTrigger: {
+          trigger: element,
+          start: 'top bottom',
+          end: 'bottom top',
+          scrub: 0.8,
+        },
+      },
+    );
+  });
+
+  gsap.to('.invitation__art', {
+    rotate: 8,
+    yPercent: 8,
+    ease: 'none',
+    scrollTrigger: {
+      trigger: '.invitation',
+      start: 'top bottom',
+      end: 'bottom top',
+      scrub: 1,
+    },
+  });
+}
+
+// 9 pm in Karachi (UTC+5). The client gave an arrival time only, so the
+// calendar entry is held to midnight.
+const eventDetails = {
+  title: 'The Baraat of Mehak & Ghayoor',
+  start: '20270108T160000Z',
+  end: '20270108T190000Z',
+  location: 'Royal Sapphire, Plot # B-54, 13B, Block 1, Gulistan-e-Johar, Karachi, Pakistan',
+  description: 'Baraat arrival 9:00 pm. Syed Hassam Uddin and Tahseen Hassam invite you to the baraat of their daughter Mehak with Ghayoor Raza.',
 };
-tick();
-window.setInterval(tick, 1000);
 
-/* ── Calendar ─────────────────────────────────────────────────────────── */
-const ADDRESS = 'Royal Sapphire, Plot # B-54, 13B, Block 1, Gulistan-e-Johar, Karachi';
-const venueStatus = $('#venue-status');
-
-$('#add-calendar').addEventListener('click', () => {
+$('#add-calendar')?.addEventListener('click', () => {
   const ics = [
     'BEGIN:VCALENDAR',
     'VERSION:2.0',
-    'PRODID:-//Mehak and Ghayoor//Baraat//EN',
-    'CALSCALE:GREGORIAN',
-    'BEGIN:VEVENT',
+    'PRODID:-//Mehak and Ghayoor//Baraat Invitation//EN',
     'UID:mehak-ghayoor-baraat-20270108@karachi',
-    'DTSTAMP:20261020T000000Z',
-    // 9 pm in Karachi (UTC+5), held to midnight.
-    'DTSTART:20270108T160000Z',
-    'DTEND:20270108T190000Z',
-    'SUMMARY:Baraat of Mehak and Ghayoor',
-    `LOCATION:${ADDRESS.replace(/,/g, '\\,')}`,
-    'DESCRIPTION:Baraat arrival 9:00 pm.',
+    'DTSTAMP:20261028T000000Z',
+    'BEGIN:VEVENT',
+    `DTSTART:${eventDetails.start}`,
+    `DTEND:${eventDetails.end}`,
+    `SUMMARY:${eventDetails.title}`,
+    `DESCRIPTION:${eventDetails.description}`,
+    `LOCATION:${eventDetails.location.replace(/,/g, '\\,')}`,
     'END:VEVENT',
     'END:VCALENDAR',
   ].join('\r\n');
-  const blob = new Blob([ics], { type: 'text/calendar;charset=utf-8' });
+
   const link = document.createElement('a');
-  link.href = URL.createObjectURL(blob);
+  link.href = URL.createObjectURL(new Blob([ics], { type: 'text/calendar;charset=utf-8' }));
   link.download = 'mehak-ghayoor-baraat.ics';
   document.body.append(link);
   link.click();
   link.remove();
-  window.setTimeout(() => URL.revokeObjectURL(link.href), 1000);
+  URL.revokeObjectURL(link.href);
+  announce('Calendar invitation downloaded.');
 });
 
-/* ── Address ──────────────────────────────────────────────────────────── */
-$('#copy-address').addEventListener('click', async () => {
+$('#copy-address')?.addEventListener('click', async () => {
   try {
-    await navigator.clipboard.writeText(ADDRESS);
-    venueStatus.textContent = 'Address copied.';
+    await navigator.clipboard.writeText(eventDetails.location);
+    announce('Venue address copied.');
   } catch {
-    venueStatus.textContent = ADDRESS;
+    announce(`Please copy: ${eventDetails.location}`);
   }
 });
 
-/* ── Replies ──────────────────────────────────────────────────────────── */
+function announce(message) {
+  const status = $('#action-status');
+  if (!status) return;
+  status.textContent = message;
+  window.setTimeout(() => {
+    if (status.textContent === message) status.textContent = '';
+  }, 4000);
+}
+
+const weddingDate = new Date('2027-01-08T21:00:00+05:00').getTime();
+
+function updateCountdown() {
+  const remaining = Math.max(0, weddingDate - Date.now());
+  const units = {
+    days: Math.floor(remaining / 86_400_000),
+    hours: Math.floor((remaining / 3_600_000) % 24),
+    minutes: Math.floor((remaining / 60_000) % 60),
+    seconds: Math.floor((remaining / 1_000) % 60),
+  };
+
+  Object.entries(units).forEach(([id, value]) => {
+    const element = document.getElementById(id);
+    if (element) element.textContent = String(value).padStart(2, '0');
+  });
+}
+
+updateCountdown();
+window.setInterval(updateCountdown, 1000);
+
+/* Replies go to the family by call or WhatsApp, so there is no form and
+   nothing is collected here. WhatsApp opens with the message ready. */
 const replyText = 'Assalam o Alaikum. I would like to confirm my attendance at the baraat of Mehak and Ghayoor on Friday, 8 January 2027.';
 document.querySelectorAll('[data-whatsapp]').forEach((link) => {
   link.href = `https://wa.me/${link.dataset.whatsapp}?text=${encodeURIComponent(replyText)}`;
