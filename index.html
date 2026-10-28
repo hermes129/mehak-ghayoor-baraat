@@ -193,7 +193,16 @@
 
       <section class="venue section-shell" aria-labelledby="venue-title">
         <div class="venue__card reveal">
-          
+          <svg class="venue__pin" viewBox="0 0 64 80" aria-hidden="true">
+            <g class="venue__pin-drop">
+              <path d="M32 6C20.4 6 11 15.2 11 26.6 11 42 32 62 32 62s21-20 21-35.4C53 15.2 43.6 6 32 6Z" />
+              <circle cx="32" cy="26.5" r="8" />
+              <circle class="venue__pin-dot" cx="32" cy="26.5" r="2.6" />
+            </g>
+            <ellipse cx="32" cy="70" rx="13" ry="3.4" />
+            <ellipse class="venue__pin-ring" cx="32" cy="70" rx="23" ry="6" />
+          </svg>
+          <p class="section-kicker">The venue</p>
           <h2 id="venue-title">Royal Sapphire.</h2>
           <p class="venue__address">
             Plot # B-54, 13B, Block 1<br />
@@ -257,7 +266,6 @@
           </ul>
         </div>
         <p class="rsvp__signoff reveal">With love and duas, <strong>Syed Hassam Uddin &amp; Tahseen Hassam</strong></p>
-        <p class="music-credit reveal">Music: <a href="https://commons.wikimedia.org/wiki/File:RanjitMakkuniRagaKaushiKanra.ogg" target="_blank" rel="noreferrer">Kaushi Kanra by Ranjit Makkuni &amp; Akram Khan · CC BY-SA 3.0</a></p>
       </section>
     </main>
 
@@ -265,7 +273,10 @@
       <source src="./assets/raga-kaushi-kanra.mp3" type="audio/mpeg" />
       <source src="./assets/raga-kaushi-kanra.ogg" type="audio/ogg; codecs=vorbis" />
     </audio>
-    <button class="music-toggle" id="music-toggle" type="button" aria-pressed="false" aria-label="Play background music" hidden>
+    <!-- The track is CC BY-SA 3.0, which requires a credit. The visible footer
+         line was removed at the client's request, so the credit rides on the
+         music button instead. -->
+    <button class="music-toggle" id="music-toggle" type="button" title="Music: Kaushi Kanra by Ranjit Makkuni &amp; Akram Khan, CC BY-SA 3.0" aria-pressed="false" aria-label="Play background music" hidden>
       <span class="music-toggle__icon" aria-hidden="true"><i></i><i></i></span>
       <span class="music-toggle__label">Play music</span>
     </button>
