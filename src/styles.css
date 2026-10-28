@@ -2104,3 +2104,24 @@ h2 em {
 @media (prefers-reduced-motion: reduce) {
   .venue__pin-drop, .venue__pin-ring { animation: none; }
 }
+
+/* A feathered ivory ellipse behind the cover text, so it reads off the door
+   panels and handles. It lives inside .opener__content, so it fades out with
+   the text when the gate opens instead of hanging over the hero. */
+.opener__halo {
+  position: absolute;
+  inset: -6% -16%;
+  z-index: -1;
+  background: radial-gradient(
+    ellipse closest-side at 50% 50%,
+    rgba(251, 248, 241, 0.92) 0%,
+    rgba(251, 248, 241, 0.86) 48%,
+    rgba(251, 248, 241, 0.5) 74%,
+    rgba(251, 248, 241, 0) 100%
+  );
+  pointer-events: none;
+}
+.opener__occasion { text-wrap: balance; }
+@media (max-width: 760px) {
+  .opener__halo { inset: -4% -22%; }
+}
