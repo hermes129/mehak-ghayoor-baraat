@@ -248,7 +248,7 @@ const eventDetails = {
   start: '20270108T160000Z',
   end: '20270108T190000Z',
   location: 'Royal Sapphire, Plot # B-54, 13B, Block 1, Gulistan-e-Johar, Karachi, Pakistan',
-  description: 'Baraat arrival 9:00 pm. Syed Hassam Uddin and Tahseen Hassam invite you to the baraat of their daughter Mehak with Ghayoor Raza.',
+  description: 'Baraat arrival 9:00 pm. Mr. and Mrs. Syed Hassam Uddin invite you to the baraat of their daughter Mehak with Ghayoor Raza.',
 };
 
 $('#add-calendar')?.addEventListener('click', () => {

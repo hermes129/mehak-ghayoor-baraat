@@ -2125,3 +2125,14 @@ h2 em {
 @media (max-width: 760px) {
   .opener__halo { inset: -4% -22%; }
 }
+
+/* Rukhsati has no confirmed time yet: a small gold mark holds the time column
+   so the row still lines up with Arrival of Baraat. */
+.programme__mark {
+  display: block;
+  width: 0.65rem;
+  height: 0.65rem;
+  margin-top: 0.75rem;
+  background: var(--gold);
+  transform: rotate(45deg);
+}
