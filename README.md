@@ -13,8 +13,12 @@ Block 1, Gulistan-e-Johar, Karachi.
 
 - Every name, date, time, venue and the countdown target are the client's.
 - The **attire** section is gone: the client asked for no dress code.
-- The **programme** holds Arrival of Baraat (9 pm) and Rukhsati. The rukhsati
-  has no confirmed time yet, so it shows a gold mark; swap in a `<time>`.
+- The **programme** holds Arrival of Baraat (9 pm) and Rukhsati (11 pm).
+- The **music** is the client's choice: the opening chords of Atif Aslam's
+  "Tere Bin" (Bas Ek Pal, 2006), from 0.40 to 9.40 s, stopping before the
+  melody enters at 9.48 s. The tail is crossfaded into the head, and the 7.2 s
+  unit repeated to 100.8 s with 1.5 s fades at the file's ends. This is a
+  commercial recording supplied by the client's side, not openly licensed.
 - The **RSVP form** is gone. Replies go to the family by call or WhatsApp
   (prefilled message): Syed Adil, Syed Mohib and Osama Ahmed; Syed Danish
   is listed by name, as no number was given.
